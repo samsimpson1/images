@@ -8,6 +8,11 @@ set -eu
 # Parameters:
 # 1: File containing backup paths
 
+if [ -n "${1}" ]; then
+  echo "Usage: backup.sh <path to files list>"
+  exit 1
+fi
+
 if ! restic -r "${RESTIC_REPOSITORY}" snapshots; then
   echo "Initialising repository ${RESTIC_REPOSITORY}"
   restic -r "${RESTIC_REPOSITORY}" init
