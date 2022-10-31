@@ -11,6 +11,7 @@ RUN wget -O restic.bz2 "https://github.com/restic/restic/releases/download/v${RE
 
 FROM public.ecr.aws/lts/ubuntu:22.04_stable
 
+RUN apt update && apt install -y ca-certificates && rm -r /var/lib/apt/lists /var/cache/apt/archives
 COPY --from=builder /usr/bin/restic /usr/bin/restic
 COPY restic/backup.sh /usr/bin/backup.sh
 RUN chmod 755 /usr/bin/backup.sh
