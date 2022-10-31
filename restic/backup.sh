@@ -8,8 +8,6 @@ set -eu
 # Parameters:
 # 1: File containing backup paths
 
-restic -r "${RESTIC_REPOSITORY}" snapshots &> /dev/null
-
 if ! restic -r "${RESTIC_REPOSITORY}" snapshots; then
   echo "Initialising repository ${RESTIC_REPOSITORY}"
   restic -r "${RESTIC_REPOSITORY}" init
