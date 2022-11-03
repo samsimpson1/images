@@ -10,7 +10,7 @@ RUN wget -O restic.bz2 "https://github.com/restic/restic/releases/download/v${RE
   chmod 755 /usr/bin/restic
 
 RUN wget -O autorestic.bz2 "https://github.com/cupcakearmy/autorestic/releases/download/v1.7.4/autorestic_1.7.4_linux_amd64.bz2"; \
-  bunzip autorestic.bz2; \
+  bunzip2 autorestic.bz2; \
   mv autorestic /usr/bin/autorestic; \
   chmod 755 /usr/bin/autorestic
 
