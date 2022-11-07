@@ -93,5 +93,6 @@ COPY mastodon/web /etc/services.d/mastodon-web/run
 COPY mastodon/sidekiq /etc/services.d/mastodon-sidekiq/run
 COPY mastodon/nginx.conf /etc/nginx/nginx.conf
 COPY mastodon/nginx /etc/services.d/nginx/run
+RUN chmod 755 /etc/cont-init.d/* /etc/services.d/**/run
 
 ENTRYPOINT ["/init"]
