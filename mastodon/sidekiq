@@ -1,0 +1,4 @@
+#!/command/with-contenv /bin/bash
+
+cd /opt/mastodon
+DB_POOL=25 bundle exec sidekiq -c 25

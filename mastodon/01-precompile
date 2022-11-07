@@ -1,0 +1,4 @@
+#!/command/with-contenv /bin/bash
+
+cd /opt/mastodon
+bundle exec rails assets:precompile

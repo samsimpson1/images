@@ -1,0 +1,4 @@
+#!/command/with-contenv /bin/bash
+
+cd /opt/mastodon
+PORT=4000 STREAMING_CLUSTER_NUM=1 node ./streaming
