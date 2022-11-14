@@ -49,12 +49,12 @@ RUN set -eux; \
 
 RUN git clone https://github.com/tootsuite/mastodon.git /opt/mastodon; \
   cd /opt/mastodon; \
-  git checkout v4.0.0;
+  git checkout v4.0.1;
 
 FROM public.ecr.aws/lts/ubuntu:22.04_stable
 
 # Install dependencies
-RUN apt update && DEBIAN_FRONTEND=noninteractive TZ=Europe/London apt install -y ca-certificates curl gpg nginx imagemagick file tzdata build-essential libicu-dev libpq-dev libidn-dev zlib1g-dev && \
+RUN apt update && DEBIAN_FRONTEND=noninteractive TZ=Europe/London apt install -y git ca-certificates curl gpg nginx imagemagick file tzdata build-essential libicu-dev libpq-dev libidn-dev zlib1g-dev && \
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | tee "/usr/share/keyrings/nodesource.gpg" >/dev/null && \
     echo "deb [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_16.x jammy main" | tee /etc/apt/sources.list.d/nodesource.list && \
     apt update && apt install -y nodejs && rm -r /var/lib/apt/lists /var/cache/apt/archives && npm i -g yarn
