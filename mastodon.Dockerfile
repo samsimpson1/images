@@ -49,7 +49,7 @@ RUN set -eux; \
 
 RUN git clone https://github.com/tootsuite/mastodon.git /opt/mastodon; \
   cd /opt/mastodon; \
-  git checkout v3.5.3;
+  git checkout v4.0.0;
 
 FROM public.ecr.aws/lts/ubuntu:22.04_stable
 
