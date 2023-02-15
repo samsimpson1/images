@@ -20,5 +20,6 @@ WORKDIR /opt/roon
 COPY --from=builder /roon ./
 
 ENV ROON_DATAROOT="/data"
+ENV ROON_ID_DIR="/data"
 
 CMD [ "/bin/bash", "-c", "/opt/roon/start.sh"]
