@@ -98,3 +98,5 @@ COPY files/nginx /etc/services.d/nginx/run
 RUN chmod 755 /etc/cont-init.d/* /etc/services.d/**/run
 
 ENTRYPOINT ["/init"]
+
+LABEL org.opencontainers.image.source https://github.com/samsimpson1/images

@@ -23,3 +23,5 @@ ENV ROON_DATAROOT="/data"
 ENV ROON_ID_DIR="/data"
 
 CMD [ "/bin/bash", "-c", "/opt/roon/start.sh"]
+
+LABEL org.opencontainers.image.source https://github.com/samsimpson1/images
