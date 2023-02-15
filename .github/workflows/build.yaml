@@ -22,6 +22,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      # Logging in to ECR stops AWS from rate limiting us
       - name: Login to ECR Public
         uses: aws-actions/amazon-ecr-login@v1
         env:
