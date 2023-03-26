@@ -17,4 +17,4 @@ FROM public.ecr.aws/lts/ubuntu:22.04_stable
 
 COPY --from=builder /build /usr
 
-LABEL org.opencontainers.image.source https://github.com/samsimpson1/images
+LABEL org.opencontainers.image.source https://github.com/amadvance/snapraid
