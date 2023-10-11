@@ -2,29 +2,19 @@ FROM public.ecr.aws/lts/ubuntu:22.04_stable AS builder
 
 ARG VERSION
 
-RUN apt update && apt install -y build-essential bison dpkg-dev libgdbm-dev wget autoconf zlib1g-dev libreadline-dev checkinstall git
+RUN apt update && apt install -y build-essential bison dpkg-dev libgdbm-dev wget autoconf zlib1g-dev libreadline-dev checkinstall git libyaml-dev libtool
 
-# Compile OpenSSL 1.1.1
-RUN set -eux; \
-    wget -O openssl.tar.gz "https://www.openssl.org/source/openssl-1.1.1s.tar.gz"; \
-    echo "c5ac01e760ee6ff0dab61d6b2bbd30146724d063eb322180c6f18a6f74e4b6aa openssl.tar.gz" | sha256sum --check; \
-    mkdir -p /usr/src/openssl; \
-    tar -xf openssl.tar.gz -C /usr/src/openssl --strip-components=1; \
-    cd /usr/src/openssl; \
-    ./config --prefix=/opt/openssl --openssldir=/opt/openssl shared zlib; \
-    make; \
-    make install_sw;  # Avoid building manpages and such.
 
-# Compile ruby
+
 # Build Ruby
 RUN set -eux; \
     \
-    wget -O ruby.tar.xz "https://cache.ruby-lang.org/pub/ruby/3.0/ruby-3.0.4.tar.xz"; \
-    echo "8e22fc7304520435522253210ed0aa9a50545f8f13c959fe01a05aea06bef2f0 *ruby.tar.xz" | sha256sum --check --strict; \
+    wget -O ruby.tar.gz "https://cache.ruby-lang.org/pub/ruby/3.2/ruby-3.2.2.tar.gz"; \
+    echo "96c57558871a6748de5bc9f274e93f4b5aad06cd8f37befa0e8d94e7b8a423bc *ruby.tar.gz" | sha256sum --check --strict; \
     \
     mkdir -p /usr/src/ruby /build; \
-    tar -xJf ruby.tar.xz -C /usr/src/ruby --strip-components=1; \
-    rm ruby.tar.xz; \
+    tar -xf ruby.tar.gz -C /usr/src/ruby --strip-components=1; \
+    rm ruby.tar.gz; \
     \
     cd /usr/src/ruby; \
     \
@@ -42,7 +32,6 @@ RUN set -eux; \
       --disable-install-doc \
       --enable-shared \
       --with-destdir=/build \
-      --with-openssl-dir=/opt/openssl \
     ; \
     make -j "$(nproc)"; \
     make install;
@@ -60,11 +49,6 @@ RUN apt update && DEBIAN_FRONTEND=noninteractive TZ=Europe/London apt install -y
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | tee "/usr/share/keyrings/nodesource.gpg" >/dev/null && \
     echo "deb [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_16.x jammy main" | tee /etc/apt/sources.list.d/nodesource.list && \
     apt update && apt install -y nodejs && rm -r /var/lib/apt/lists /var/cache/apt/archives && npm i -g yarn
-
-# Copy OpenSSL and link in system castore
-COPY --from=builder /opt/openssl /opt/openssl
-RUN rmdir /opt/openssl/certs; \
-    ln -s /etc/ssl/certs /opt/openssl/certs
 
 # Copy Ruby binaries from builder image
 COPY --from=builder /build /
