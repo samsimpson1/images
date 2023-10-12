@@ -6,8 +6,8 @@ RUN apt update && apt install -y build-essential bison dpkg-dev libgdbm-dev wget
 
 # Compile OpenSSL 1.1.1
 RUN set -eux; \
-    wget -O openssl.tar.gz "https://www.openssl.org/source/openssl-1.1.1s.tar.gz"; \
-    echo "c5ac01e760ee6ff0dab61d6b2bbd30146724d063eb322180c6f18a6f74e4b6aa openssl.tar.gz" | sha256sum --check; \
+    wget -O openssl.tar.gz "https://www.openssl.org/source/openssl-1.1.1w.tar.gz"; \
+    echo "cf3098950cb4d853ad95c0841f1f9c6d3dc102dccfcacd521d93925208b76ac8 openssl.tar.gz" | sha256sum --check; \
     mkdir -p /usr/src/openssl; \
     tar -xf openssl.tar.gz -C /usr/src/openssl --strip-components=1; \
     cd /usr/src/openssl; \
