@@ -4,7 +4,16 @@ ARG VERSION
 
 RUN apt update && apt install -y build-essential bison dpkg-dev libgdbm-dev wget autoconf zlib1g-dev libreadline-dev checkinstall git libyaml-dev libtool
 
-
+# Compile OpenSSL 1.1.1
+RUN set -eux; \
+    wget -O openssl.tar.gz "https://www.openssl.org/source/openssl-1.1.1s.tar.gz"; \
+    echo "c5ac01e760ee6ff0dab61d6b2bbd30146724d063eb322180c6f18a6f74e4b6aa openssl.tar.gz" | sha256sum --check; \
+    mkdir -p /usr/src/openssl; \
+    tar -xf openssl.tar.gz -C /usr/src/openssl --strip-components=1; \
+    cd /usr/src/openssl; \
+    ./config --prefix=/opt/openssl --openssldir=/opt/openssl shared zlib; \
+    make; \
+    make install_sw;  # Avoid building manpages and such.
 
 # Build Ruby
 RUN set -eux; \
@@ -32,6 +41,7 @@ RUN set -eux; \
       --disable-install-doc \
       --enable-shared \
       --with-destdir=/build \
+      --with-openssl-dir=/opt/openssl \
     ; \
     make -j "$(nproc)"; \
     make install;
