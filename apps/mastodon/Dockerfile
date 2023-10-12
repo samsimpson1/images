@@ -2,18 +2,7 @@ FROM public.ecr.aws/lts/ubuntu:22.04_stable AS builder
 
 ARG VERSION
 
-RUN apt update && apt install -y build-essential bison dpkg-dev libgdbm-dev wget autoconf zlib1g-dev libreadline-dev checkinstall git libyaml-dev libtool
-
-# Compile OpenSSL 1.1.1
-RUN set -eux; \
-    wget -O openssl.tar.gz "https://www.openssl.org/source/openssl-1.1.1w.tar.gz"; \
-    echo "cf3098950cb4d853ad95c0841f1f9c6d3dc102dccfcacd521d93925208b76ac8 openssl.tar.gz" | sha256sum --check; \
-    mkdir -p /usr/src/openssl; \
-    tar -xf openssl.tar.gz -C /usr/src/openssl --strip-components=1; \
-    cd /usr/src/openssl; \
-    ./config --prefix=/opt/openssl --openssldir=/opt/openssl shared zlib; \
-    make; \
-    make install_sw;  # Avoid building manpages and such.
+RUN apt update && apt install -y build-essential bison dpkg-dev libgdbm-dev wget autoconf zlib1g-dev libreadline-dev checkinstall git libyaml-dev libtool libssl-dev
 
 # Build Ruby
 RUN set -eux; \
@@ -41,7 +30,6 @@ RUN set -eux; \
       --disable-install-doc \
       --enable-shared \
       --with-destdir=/build \
-      --with-openssl-dir=/opt/openssl \
     ; \
     make -j "$(nproc)"; \
     make install;
@@ -55,7 +43,7 @@ RUN git clone https://github.com/tootsuite/mastodon.git /opt/mastodon; \
 FROM public.ecr.aws/lts/ubuntu:22.04_stable
 
 # Install dependencies
-RUN apt update && DEBIAN_FRONTEND=noninteractive TZ=Europe/London apt install -y git ca-certificates curl gpg nginx imagemagick file tzdata build-essential libicu-dev libpq-dev libidn-dev zlib1g-dev && \
+RUN apt update && DEBIAN_FRONTEND=noninteractive TZ=Europe/London apt install -y git ca-certificates curl gpg nginx imagemagick file tzdata build-essential libicu-dev libpq-dev libidn-dev zlib1g-dev libyaml-0-2 && \
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | tee "/usr/share/keyrings/nodesource.gpg" >/dev/null && \
     echo "deb [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_16.x jammy main" | tee /etc/apt/sources.list.d/nodesource.list && \
     apt update && apt install -y nodejs && rm -r /var/lib/apt/lists /var/cache/apt/archives && npm i -g yarn
