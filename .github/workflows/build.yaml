@@ -16,7 +16,7 @@ jobs:
       packages: write
     strategy:
       matrix:
-        app: [ mastodon, roon, snapraid ]
+        app: [ roon, snapraid ]
     steps:
       - name: Login to GHCR
         uses: docker/login-action@v2

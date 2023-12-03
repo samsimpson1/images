@@ -1,3 +1,0 @@
-#!/command/with-contenv /bin/bash
-cd /opt/mastodon
-PORT=3000 bundle exec puma -C config/puma.rb
